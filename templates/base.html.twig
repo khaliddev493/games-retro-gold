@@ -472,10 +472,15 @@
         </a>
 
         <div class="navbar-search d-none d-lg-flex">
-            <div class="input-group w-100">
-                <input type="text" placeholder="Rechercher un jeu, une console…">
-                <button type="button"><i class="bi bi-search"></i></button>
-            </div>
+            <form method="get" action="{{ path('product_index') }}" class="w-100">
+    <div class="input-group">
+        <input type="text"
+               name="q"
+               placeholder="Rechercher un jeu, une console…"
+               value="{{ app.request.query.get('q') }}">
+        <button type="submit"><i class="bi bi-search"></i></button>
+    </div>
+</form>
         </div>
 
         <button class="navbar-toggler ms-auto me-2" type="button"

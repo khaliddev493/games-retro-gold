@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\ProductSearch;
 use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,6 +11,10 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/categories', name: 'category_')]
 class CategoryController extends AbstractController
 {
+    public function __construct(
+        private ProductSearch $productSearch
+    ) {}
+
     // Liste de toutes les catégories
     #[Route('/', name: 'index')]
     public function index(CategoryRepository $categoryRepository): Response
@@ -32,7 +37,8 @@ class CategoryController extends AbstractController
         }
 
         return $this->render('category/show.html.twig', [
-            'category' => $category,
+            'category'  => $category,
+            'platforms' => $this->productSearch->getAvailablePlatforms(),
         ]);
     }
 }

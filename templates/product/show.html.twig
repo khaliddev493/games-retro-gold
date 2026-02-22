@@ -50,6 +50,10 @@
                     {% endif %}
                 </span>
             </div>
+
+           <small class="text-muted">
+    Prix HT : {{ priceHT|number_format(2, ',', '\u00a0') }} € — TVA : {{ tva|number_format(2, ',', '\u00a0') }} €
+</small>
             {# Bouton panier — à connecter à une route cart_add quand la fonctionnalité sera développée #}
             {% if product.stock > 0 %}
                 <button class="btn btn-retro" disabled>

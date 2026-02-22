@@ -3,41 +3,80 @@
 {% block title %}Tous les jeux — RetroGames{% endblock %}
 
 {% block body %}
-<div class="container py-5">
+<div class="container py-4">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}">Accueil</a></li>
+            <li class="breadcrumb-item active">Tous les jeux</li>
+        </ol>
+    </nav>
 
     <h1 class="section-title"><i class="bi bi-grid-fill"></i> Tous les jeux rétro</h1>
 
-    <div class="row g-4">
+    {# ── Formulaire de recherche ── #}
+    <form method="get" action="{{ path('product_index') }}" class="mb-4">
+        <div class="input-group">
+            <input type="text"
+                   name="q"
+                   class="form-control"
+                   placeholder="Rechercher un jeu…"
+                   value="{{ query }}">
+            <button type="submit" class="btn-retro">
+                <i class="bi bi-search"></i> Rechercher
+            </button>
+        </div>
+        {% if query %}
+            <small class="text-muted mt-2 d-block">
+                {{ products|length }} résultat(s) pour "<strong>{{ query }}</strong>"
+                — <a href="{{ path('product_index') }}" style="color: var(--accent);">Effacer</a>
+            </small>
+        {% endif %}
+    </form>
+
+    {# ── Grille produits ── #}
+    <div class="row g-3">
         {% for product in products %}
-            <div class="col-sm-6 col-lg-4">
-                <div class="card">
+            <div class="col-6 col-md-3">
+                <div class="card h-100">
                     <img src="{{ product.imageUrl }}"
                          class="card-img-top"
                          alt="{{ product.name }}"
-                         onerror="this.src='https://placehold.co/300x200/2a1040/e0e0e0?text=No+Image'">
+                         onerror="this.src='https://placehold.co/300x200/f5f5f5/999?text=No+Image'">
                     <div class="card-body d-flex flex-column">
-                        <div class="d-flex justify-content-between mb-2">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
                             <span class="badge-platform">{{ product.platform }}</span>
                             <small class="text-muted">{{ product.releaseYear }}</small>
                         </div>
                         <h5 class="card-title">{{ product.name }}</h5>
-                        <p class="card-text flex-grow-1">{{ product.description|u.truncate(90, '…', false) }}</p>
-                        <small class="text-muted mb-2">
-                            <i class="bi bi-tag-fill"></i>
+                        <p class="card-text flex-grow-1">{{ product.description|u.truncate(80, '…', false) }}</p>
+                        <small class="mb-2">
+                            <i class="bi bi-tag-fill" style="color: var(--primary)"></i>
                             <a href="{{ path('category_show', {id: product.category.id}) }}"
-                               style="color:var(--retro-cyan); text-decoration:none">
+                               style="color: var(--primary); font-size: .8rem;">
                                 {{ product.category.name }}
                             </a>
                         </small>
-                        <div class="d-flex justify-content-between align-items-center mt-2">
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-2">
                             <span class="price">{{ product.price|number_format(2, ',', '\u00a0') }} €</span>
-                            <a href="{{ path('product_show', {id: product.id}) }}" class="btn btn-retro">Détails</a>
+                            <a href="{{ path('product_show', {id: product.id}) }}" class="btn-retro">
+                                Détails
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         {% else %}
-            <p class="text-muted">Aucun jeu disponible pour le moment.</p>
+            <div class="col-12">
+                <p class="text-muted">
+                    {% if query %}
+                        Aucun jeu trouvé pour "<strong>{{ query }}</strong>".
+                        <a href="{{ path('product_index') }}" style="color: var(--accent);">Voir tous les jeux</a>
+                    {% else %}
+                        Aucun jeu disponible pour le moment.
+                    {% endif %}
+                </p>
+            </div>
         {% endfor %}
     </div>
 

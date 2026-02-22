@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégories — RetroGames{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+
+    <h1 class="section-title"><i class="bi bi-tags-fill"></i> Toutes les catégories</h1>
+
+    <div class="row g-4">
+        {% for category in categories %}
+            <div class="col-sm-6 col-md-4">
+                <div class="card p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-tv fs-1 me-3" style="color: var(--retro-cyan)"></i>
+                        <h4 class="card-title mb-0">{{ category.name }}</h4>
+                    </div>
+                    <p class="card-text">{{ category.description }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="badge-platform">
+                            {# count des produits de la catégorie #}
+                            <i class="bi bi-joystick"></i> {{ category.products|length }} jeu(x)
+                        </span>
+                        <a href="{{ path('category_show', {id: category.id}) }}" class="btn btn-retro">
+                            Voir les jeux
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-muted">Aucune catégorie trouvée.</p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

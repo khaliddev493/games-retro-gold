@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}RetroGames — Accueil{% endblock %}
+
+{% block body %}
+
+<section class="hero">
+    <div class="container">
+        <h1><i class="bi bi-joystick"></i> RetroGames Shop</h1>
+        <p class="lead mt-3">La boutique des jeux vidéo rétro des années 70 à 2000</p>
+        <a href="{{ path('product_index') }}" class="btn btn-retro mt-3">
+            <i class="bi bi-controller"></i> Voir tous les jeux
+        </a>
+    </div>
+</section>
+
+<div class="container py-5">
+
+    <h2 class="section-title"><i class="bi bi-tags-fill"></i> Parcourir par console</h2>
+    <div class="row g-3 mb-5">
+        {% for category in categories %}
+            <div class="col-6 col-md-3">
+                <a href="{{ path('category_show', {id: category.id}) }}" class="text-decoration-none">
+                    <div class="card text-center p-3">
+                        <i class="bi bi-tv fs-2 mb-2" style="color: var(--retro-cyan)"></i>
+                        <div class="card-title fs-6">{{ category.name }}</div>
+                        <small class="text-muted">{{ category.products|length }} jeu(x)</small>
+                    </div>
+                </a>
+            </div>
+        {% else %}
+            <p class="text-muted">Aucune catégorie disponible.</p>
+        {% endfor %}
+    </div>
+
+    <h2 class="section-title"><i class="bi bi-stars"></i> Derniers jeux ajoutés</h2>
+    <div class="row g-4">
+        {% for product in latest %}
+            <div class="col-sm-6 col-lg-3">
+                <div class="card">
+                    <img src="{{ product.imageUrl }}"
+                         class="card-img-top"
+                         alt="{{ product.name }}"
+                         onerror="this.src='https://placehold.co/300x200/2a1040/e0e0e0?text=No+Image'">
+                    <div class="card-body d-flex flex-column">
+                        <span class="badge-platform mb-2">{{ product.platform }}</span>
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text flex-grow-1">{{ product.description|u.truncate(80, '…', false) }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <span class="price">{{ product.price|number_format(2, ',', '\u00a0') }} €</span>
+                            <a href="{{ path('product_show', {id: product.id}) }}" class="btn btn-retro">Voir</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p class="text-muted">Aucun jeu disponible pour le moment.</p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

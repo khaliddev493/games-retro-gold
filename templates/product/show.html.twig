@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }} — RetroGames{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ path('home') }}" style="color:var(--retro-cyan)">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('product_index') }}" style="color:var(--retro-cyan)">Jeux</a></li>
+            <li class="breadcrumb-item active text-light">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5">
+
+        <div class="col-md-4 text-center">
+            <img src="{{ product.imageUrl }}"
+                 class="img-fluid rounded"
+                 style="max-height:350px; object-fit:contain; background:#1a0a2e; padding:20px; border:2px solid var(--retro-purple);"
+                 alt="{{ product.name }}"
+                 onerror="this.src='https://placehold.co/300x300/2a1040/e0e0e0?text=No+Image'">
+        </div>
+
+        <div class="col-md-8">
+            <h1 style="font-family:'Press Start 2P',cursive; color:var(--retro-yellow); font-size:1.2rem;">
+                {{ product.name }}
+            </h1>
+            <div class="mt-3 mb-4">
+                <span class="badge-platform me-2">{{ product.platform }}</span>
+                <span class="badge-platform">{{ product.releaseYear }}</span>
+            </div>
+            <p class="text-muted">
+                <i class="bi bi-tag-fill"></i> Catégorie :
+                <a href="{{ path('category_show', {id: product.category.id}) }}" style="color:var(--retro-cyan);">
+                    {{ product.category.name }}
+                </a>
+            </p>
+            <p style="line-height:1.8; color:#ccc;">{{ product.description }}</p>
+            <hr style="border-color:var(--retro-purple);">
+            <div class="d-flex align-items-center gap-4 my-4">
+                <span class="price" style="font-size:1.5rem;">{{ product.price|number_format(2, ',', '\u00a0') }} €</span>
+                <span class="{{ product.stock > 0 ? 'text-success' : 'text-danger' }}">
+                    <i class="bi bi-{{ product.stock > 0 ? 'check-circle-fill' : 'x-circle-fill' }}"></i>
+                    {% if product.stock > 0 %}
+                        En stock ({{ product.stock }} ex.)
+                    {% else %}
+                        Rupture de stock
+                    {% endif %}
+                </span>
+            </div>
+            {# Bouton panier — à connecter à une route cart_add quand la fonctionnalité sera développée #}
+            {% if product.stock > 0 %}
+                <button class="btn btn-retro" disabled>
+                    <i class="bi bi-cart-plus-fill"></i> Ajouter au panier
+                </button>
+            {% else %}
+                <button class="btn btn-retro" disabled style="opacity:.5; cursor:not-allowed;">
+                    Indisponible
+                </button>
+            {% endif %}
+            <div class="mt-4">
+                <a href="{{ path('product_index') }}" class="btn btn-retro" style="background: linear-gradient(90deg,#3a0050,#6c3fa0);">
+                    <i class="bi bi-arrow-left"></i> Retour à la liste
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

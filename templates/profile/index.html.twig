@@ -1,0 +1,217 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil — RetroGames{% endblock %}
+
+{% block body %}
+<div class="container" style="padding: 3rem 1rem;">
+
+    {# ══ HEADER ══════════════════════════════════════════════════ #}
+    <div style="margin-bottom: 2.5rem;">
+        <p style="font-family:'Cinzel',serif; color:var(--text-muted);
+                  font-size:.75rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:.4rem;">
+            <a href="{{ path('app_dashboard') }}"
+               style="color:var(--text-muted); transition:color .2s;"
+               onmouseover="this.style.color='var(--gold)'"
+               onmouseout="this.style.color='var(--text-muted)'">
+                <i class="bi bi-speedometer2 me-1"></i> Dashboard
+            </a>
+            <i class="bi bi-chevron-right mx-1" style="font-size:.6rem;"></i>
+            Mon profil
+        </p>
+        <h1 style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:700;
+                   color:var(--text-primary); letter-spacing:2px;">
+            <i class="bi bi-person-circle me-2" style="color:var(--gold);"></i> Mon profil
+        </h1>
+        <p style="color:var(--text-muted); font-size:.85rem; margin-top:.4rem;">
+            Gérez vos informations personnelles
+        </p>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 2fr; gap:1.5rem; align-items:start;">
+
+        {# ══ CARTE IDENTITÉ ══════════════════════════════════════ #}
+        <div style="background:var(--dark2); border:1px solid var(--gold-border);
+                    border-radius:8px; padding:1.75rem; text-align:center;">
+
+            <div style="height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent);
+                        margin:-1.75rem -1.75rem 1.5rem; border-radius:8px 8px 0 0;"></div>
+
+            {# Avatar initiales #}
+            <div style="width:80px; height:80px; border-radius:50%;
+                        background:var(--gold-subtle); border:2px solid var(--gold-border);
+                        display:flex; align-items:center; justify-content:center;
+                        margin:0 auto 1rem;
+                        font-family:'Cinzel',serif; font-size:1.5rem; font-weight:700; color:var(--gold);">
+                {{ user.firstName|slice(0,1)|upper }}{{ user.lastName|slice(0,1)|upper }}
+            </div>
+
+            <div style="font-family:'Cinzel',serif; font-size:1rem; font-weight:600;
+                        color:var(--text-primary); margin-bottom:.25rem;">
+                {{ user.firstName }} {{ user.lastName }}
+            </div>
+            <div style="color:var(--text-muted); font-size:.8rem; margin-bottom:1rem;">
+                {{ user.email }}
+            </div>
+
+            <div style="background:var(--gold-subtle); border:1px solid var(--gold-border);
+                        border-radius:4px; padding:5px 12px; display:inline-block;
+                        font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:1px; color:var(--gold);">
+                {% if 'ROLE_ADMIN' in user.roles %}
+                    ⭐ Administrateur
+                {% else %}
+                    ✔ Client vérifié
+                {% endif %}
+            </div>
+
+            <div style="margin-top:1.25rem; padding-top:1.25rem; border-top:1px solid var(--gold-border);
+                        color:var(--text-muted); font-size:.75rem;">
+                <i class="bi bi-calendar me-1" style="color:var(--gold-dark);"></i>
+                Membre depuis le {{ user.createdAt|date('d/m/Y') }}
+            </div>
+        </div>
+
+        {# ══ FORMULAIRE ══════════════════════════════════════════ #}
+        <div style="background:var(--dark2); border:1px solid var(--gold-border); border-radius:8px; padding:1.75rem;">
+
+            <div style="height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent);
+                        margin:-1.75rem -1.75rem 1.5rem; border-radius:8px 8px 0 0;"></div>
+
+            {{ form_start(profileForm, {attr: {novalidate: 'novalidate'}}) }}
+
+                {# ── Infos personnelles ── #}
+                <div style="font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:2px;
+                            text-transform:uppercase; color:var(--gold);
+                            margin-bottom:1.25rem; padding-bottom:.6rem;
+                            border-bottom:1px solid var(--gold-border);">
+                    <i class="bi bi-person me-1"></i> Informations personnelles
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                    <div>
+                        {{ form_label(profileForm.firstName, 'Prénom', {
+                            label_attr: {style: 'display:block; font-family:Cinzel,serif; font-size:.72rem;
+                                                letter-spacing:1px; text-transform:uppercase;
+                                                color:var(--text-muted); margin-bottom:.4rem;'}
+                        }) }}
+                        {{ form_widget(profileForm.firstName, {attr: {
+                            style: 'width:100%; background:var(--dark); border:1px solid var(--gold-border);
+                                    color:var(--text-primary); padding:10px 14px; border-radius:4px;
+                                    font-size:.9rem; outline:none; font-family:Lato,sans-serif;',
+                            onfocus: "this.style.borderColor='var(--gold)'",
+                            onblur: "this.style.borderColor='var(--gold-border)'"
+                        }}) }}
+                        {% if not profileForm.firstName.vars.valid %}
+                            <div style="color:var(--danger); font-size:.75rem; margin-top:.3rem;">
+                                {{ form_errors(profileForm.firstName) }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        {{ form_label(profileForm.lastName, 'Nom', {
+                            label_attr: {style: 'display:block; font-family:Cinzel,serif; font-size:.72rem;
+                                                letter-spacing:1px; text-transform:uppercase;
+                                                color:var(--text-muted); margin-bottom:.4rem;'}
+                        }) }}
+                        {{ form_widget(profileForm.lastName, {attr: {
+                            style: 'width:100%; background:var(--dark); border:1px solid var(--gold-border);
+                                    color:var(--text-primary); padding:10px 14px; border-radius:4px;
+                                    font-size:.9rem; outline:none; font-family:Lato,sans-serif;',
+                            onfocus: "this.style.borderColor='var(--gold)'",
+                            onblur: "this.style.borderColor='var(--gold-border)'"
+                        }}) }}
+                        {% if not profileForm.lastName.vars.valid %}
+                            <div style="color:var(--danger); font-size:.75rem; margin-top:.3rem;">
+                                {{ form_errors(profileForm.lastName) }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div style="margin-bottom:1.75rem;">
+                    {{ form_label(profileForm.email, 'Email', {
+                        label_attr: {style: 'display:block; font-family:Cinzel,serif; font-size:.72rem;
+                                            letter-spacing:1px; text-transform:uppercase;
+                                            color:var(--text-muted); margin-bottom:.4rem;'}
+                    }) }}
+                    {{ form_widget(profileForm.email, {attr: {
+                        style: 'width:100%; background:var(--dark); border:1px solid var(--gold-border);
+                                color:var(--text-primary); padding:10px 14px; border-radius:4px;
+                                font-size:.9rem; outline:none; font-family:Lato,sans-serif;',
+                        onfocus: "this.style.borderColor='var(--gold)'",
+                        onblur: "this.style.borderColor='var(--gold-border)'"
+                    }}) }}
+                    {% if not profileForm.email.vars.valid %}
+                        <div style="color:var(--danger); font-size:.75rem; margin-top:.3rem;">
+                            {{ form_errors(profileForm.email) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# ── Changer mot de passe ── #}
+                <div style="font-family:'Cinzel',serif; font-size:.72rem; letter-spacing:2px;
+                            text-transform:uppercase; color:var(--gold);
+                            margin-bottom:1.25rem; padding-bottom:.6rem;
+                            border-bottom:1px solid var(--gold-border);">
+                    <i class="bi bi-lock me-1"></i> Changer le mot de passe
+                    <span style="color:var(--text-muted); font-size:.65rem; font-family:Lato,sans-serif;
+                                 text-transform:none; letter-spacing:0; margin-left:.5rem;">
+                        (optionnel)
+                    </span>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.75rem;">
+                    <div>
+                        {{ form_label(profileForm.newPassword.first, 'Nouveau mot de passe', {
+                            label_attr: {style: 'display:block; font-family:Cinzel,serif; font-size:.72rem;
+                                                letter-spacing:1px; text-transform:uppercase;
+                                                color:var(--text-muted); margin-bottom:.4rem;'}
+                        }) }}
+                        {{ form_widget(profileForm.newPassword.first, {attr: {
+                            style: 'width:100%; background:var(--dark); border:1px solid var(--gold-border);
+                                    color:var(--text-primary); padding:10px 14px; border-radius:4px;
+                                    font-size:.9rem; outline:none; font-family:Lato,sans-serif;',
+                            placeholder: 'Minimum 8 caractères',
+                            onfocus: "this.style.borderColor='var(--gold)'",
+                            onblur: "this.style.borderColor='var(--gold-border)'"
+                        }}) }}
+                        {% if not profileForm.newPassword.first.vars.valid %}
+                            <div style="color:var(--danger); font-size:.75rem; margin-top:.3rem;">
+                                {{ form_errors(profileForm.newPassword.first) }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        {{ form_label(profileForm.newPassword.second, 'Confirmer', {
+                            label_attr: {style: 'display:block; font-family:Cinzel,serif; font-size:.72rem;
+                                                letter-spacing:1px; text-transform:uppercase;
+                                                color:var(--text-muted); margin-bottom:.4rem;'}
+                        }) }}
+                        {{ form_widget(profileForm.newPassword.second, {attr: {
+                            style: 'width:100%; background:var(--dark); border:1px solid var(--gold-border);
+                                    color:var(--text-primary); padding:10px 14px; border-radius:4px;
+                                    font-size:.9rem; outline:none; font-family:Lato,sans-serif;',
+                            placeholder: 'Répétez le mot de passe',
+                            onfocus: "this.style.borderColor='var(--gold)'",
+                            onblur: "this.style.borderColor='var(--gold-border)'"
+                        }}) }}
+                    </div>
+                </div>
+
+                {# Boutons #}
+                <div style="display:flex; gap:.75rem; flex-wrap:wrap;">
+                    <button type="submit" class="btn-retro">
+                        <i class="bi bi-check2-circle"></i> Enregistrer
+                    </button>
+                    <a href="{{ path('app_dashboard') }}"
+                       class="btn-retro"
+                       style="background:var(--dark); border:1px solid var(--gold-border); color:var(--text-secondary);">
+                        <i class="bi bi-arrow-left" style="color:var(--gold);"></i> Retour
+                    </a>
+                </div>
+
+            {{ form_end(profileForm) }}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

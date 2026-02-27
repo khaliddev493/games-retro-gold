@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un compte — RetroGames{% endblock %}
+
+{% block body %}
+<div class="container" style="min-height: 80vh; display:flex; align-items:center; justify-content:center; padding: 3rem 1rem;">
+    <div style="width: 100%; max-width: 500px;">
+
+        {# ══ HEADER ══════════════════════════════════════════════ #}
+        <div style="text-align:center; margin-bottom: 2rem;">
+            <div style="font-family:'Press Start 2P', cursive; color:var(--gold);
+                        text-shadow: 0 0 20px rgba(201,168,76,.4);
+                        font-size: .85rem; letter-spacing: 2px; margin-bottom: 1rem;">
+                <i class="bi bi-joystick me-2"></i> RetroGames
+            </div>
+            <h1 style="font-family:'Cinzel', serif; font-size: 1.4rem; font-weight:700;
+                       color: var(--text-primary); letter-spacing: 2px; margin-bottom: .5rem;">
+                Créer un compte
+            </h1>
+            <p style="color: var(--text-muted); font-size: .85rem; letter-spacing: 1px;">
+                Rejoignez la communauté RetroGames
+            </p>
+        </div>
+
+        {# ══ CARD ════════════════════════════════════════════════ #}
+        <div style="background: var(--dark2);
+                    border: 1px solid var(--gold-border);
+                    border-radius: 8px;
+                    padding: 2rem;
+                    box-shadow: 0 20px 60px rgba(0,0,0,.6);">
+
+            {# Ligne dorée en haut de la card #}
+            <div style="height: 2px;
+                        background: linear-gradient(90deg, transparent, var(--gold), transparent);
+                        margin: -2rem -2rem 1.75rem;
+                        border-radius: 8px 8px 0 0;"></div>
+
+            {{ form_start(registrationForm, {attr: {novalidate: 'novalidate'}}) }}
+
+                {# Prénom + Nom #}
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                    <div>
+                        {{ form_label(registrationForm.firstName, 'Prénom', {
+                            label_attr: {style: 'display:block; font-family:Cinzel,serif; font-size:.72rem;
+                                                letter-spacing:1px; text-transform:uppercase;
+                                                color:var(--text-muted); margin-bottom:.4rem;'}
+                        }) }}
+                        {{ form_widget(registrationForm.firstName, {attr: {
+                            style: 'width:100%; background:var(--dark); border:1px solid var(--gold-border);
+                                    color:var(--text-primary); padding:10px 14px; border-radius:4px;
+                                    font-size:.9rem; outline:none; font-family:Lato,sans-serif;
+                                    transition: border-color .2s;',
+                            placeholder: 'Votre prénom',
+                            onfocus: "this.style.borderColor='var(--gold)'",
+                            onblur: "this.style.borderColor='var(--gold-border)'"
+                        }}) }}
+                        {% if not registrationForm.firstName.vars.valid %}
+                            <div style="color:var(--danger); font-size:.75rem; margin-top:.3rem;">
+                                {{ form_errors(registrationForm.firstName) }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        {{ form_label(registrationForm.lastName, 'Nom', {
+                            label_attr: {style: 'display:block; font-family:Cinzel,serif; font-size:.72rem;
+                                                letter-spacing:1px; text-transform:uppercase;
+                                                color:var(--text-muted); margin-bottom:.4rem;'}
+                        }) }}
+                        {{ form_widget(registrationForm.lastName, {attr: {
+                            style: 'width:100%; background:var(--dark); border:1px solid var(--gold-border);
+                                    color:var(--text-primary); padding:10px 14px; border-radius:4px;
+                                    font-size:.9rem; outline:none; font-family:Lato,sans-serif;
+                                    transition: border-color .2s;',
+                            placeholder: 'Votre nom',
+                            onfocus: "this.style.borderColor='var(--gold)'",
+                            onblur: "this.style.borderColor='var(--gold-border)'"
+                        }}) }}
+                        {% if not registrationForm.lastName.vars.valid %}
+                            <div style="color:var(--danger); font-size:.75rem; margin-top:.3rem;">
+                                {{ form_errors(registrationForm.lastName) }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# Email #}
+                <div style="margin-bottom: 1rem;">
+                    {{ form_label(registrationForm.email, 'Email', {
+                        label_attr: {style: 'display:block; font-family:Cinzel,serif; font-size:.72rem;
+                                            letter-spacing:1px; text-transform:uppercase;
+                                            color:var(--text-muted); margin-bottom:.4rem;'}
+                    }) }}
+                    {{ form_widget(registrationForm.email, {attr: {
+                        style: 'width:100%; background:var(--dark); border:1px solid var(--gold-border);
+                                color:var(--text-primary); padding:10px 14px; border-radius:4px;
+                                font-size:.9rem; outline:none; font-family:Lato,sans-serif;
+                                transition: border-color .2s;',
+                        placeholder: 'votre@email.com',
+                        onfocus: "this.style.borderColor='var(--gold)'",
+                        onblur: "this.style.borderColor='var(--gold-border)'"
+                    }}) }}
+                    {% if not registrationForm.email.vars.valid %}
+                        <div style="color:var(--danger); font-size:.75rem; margin-top:.3rem;">
+                            {{ form_errors(registrationForm.email) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# Mot de passe #}
+                <div style="margin-bottom: 1rem;">
+                    {{ form_label(registrationForm.plainPassword, 'Mot de passe', {
+                        label_attr: {style: 'display:block; font-family:Cinzel,serif; font-size:.72rem;
+                                            letter-spacing:1px; text-transform:uppercase;
+                                            color:var(--text-muted); margin-bottom:.4rem;'}
+                    }) }}
+                    {{ form_widget(registrationForm.plainPassword, {attr: {
+                        style: 'width:100%; background:var(--dark); border:1px solid var(--gold-border);
+                                color:var(--text-primary); padding:10px 14px; border-radius:4px;
+                                font-size:.9rem; outline:none; font-family:Lato,sans-serif;
+                                transition: border-color .2s;',
+                        placeholder: 'Minimum 8 caractères',
+                        onfocus: "this.style.borderColor='var(--gold)'",
+                        onblur: "this.style.borderColor='var(--gold-border)'"
+                    }}) }}
+                    {% if not registrationForm.plainPassword.vars.valid %}
+                        <div style="color:var(--danger); font-size:.75rem; margin-top:.3rem;">
+                            {{ form_errors(registrationForm.plainPassword) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {# CGU #}
+                <div style="margin-bottom: 1.5rem; display:flex; align-items:center; gap:.75rem;">
+                    {{ form_widget(registrationForm.agreeTerms, {attr: {
+                        style: 'width:16px; height:16px; accent-color:var(--gold); cursor:pointer; flex-shrink:0;'
+                    }}) }}
+                    <label style="color:var(--text-muted); font-size:.82rem; cursor:pointer;">
+                        J'accepte les <a href="#" style="color:var(--gold);">conditions d'utilisation</a>
+                    </label>
+                </div>
+                {% if not registrationForm.agreeTerms.vars.valid %}
+                    <div style="color:var(--danger); font-size:.75rem; margin-top:-.75rem; margin-bottom:1rem;">
+                        {{ form_errors(registrationForm.agreeTerms) }}
+                    </div>
+                {% endif %}
+
+                {# Bouton submit #}
+                <button type="submit" class="btn-retro" style="width:100%; justify-content:center; padding:12px;">
+                    <i class="bi bi-person-check"></i> Créer mon compte
+                </button>
+
+            {{ form_end(registrationForm) }}
+
+            {# Lien connexion #}
+            <div style="text-align:center; margin-top:1.5rem; padding-top:1.5rem;
+                        border-top:1px solid var(--gold-border);">
+                <span style="color:var(--text-muted); font-size:.85rem;">Déjà un compte ?</span>
+                <a href="{{ path('app_login') }}"
+                   style="color:var(--gold); font-family:'Cinzel',serif;
+                          font-size:.82rem; letter-spacing:1px; margin-left:.5rem;">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Se connecter
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

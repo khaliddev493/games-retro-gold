@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion — RetroGames{% endblock %}
+
+{% block body %}
+<div class="container" style="min-height: 80vh; display:flex; align-items:center; justify-content:center; padding: 3rem 1rem;">
+    <div style="width: 100%; max-width: 420px;">
+
+        {# ══ HEADER ══════════════════════════════════════════════ #}
+        <div style="text-align:center; margin-bottom: 2rem;">
+            <div style="font-family:'Press Start 2P', cursive; color:var(--gold);
+                        text-shadow: 0 0 20px rgba(201,168,76,.4);
+                        font-size: .85rem; letter-spacing: 2px; margin-bottom: 1rem;">
+                <i class="bi bi-joystick me-2"></i> RetroGames
+            </div>
+            <h1 style="font-family:'Cinzel', serif; font-size: 1.4rem; font-weight:700;
+                       color: var(--text-primary); letter-spacing: 2px; margin-bottom: .5rem;">
+                Connexion
+            </h1>
+            <p style="color: var(--text-muted); font-size: .85rem; letter-spacing: 1px;">
+                Bon retour parmi nous 👾
+            </p>
+        </div>
+
+        {# ══ CARD ════════════════════════════════════════════════ #}
+        <div style="background: var(--dark2);
+                    border: 1px solid var(--gold-border);
+                    border-radius: 8px;
+                    padding: 2rem;
+                    box-shadow: 0 20px 60px rgba(0,0,0,.6);">
+
+            {# Ligne dorée en haut #}
+            <div style="height: 2px;
+                        background: linear-gradient(90deg, transparent, var(--gold), transparent);
+                        margin: -2rem -2rem 1.75rem;
+                        border-radius: 8px 8px 0 0;"></div>
+
+            {# Message d'erreur #}
+            {% if error %}
+                <div style="background: rgba(207,74,74,.1); border: 1px solid rgba(207,74,74,.3);
+                            border-radius: 4px; padding: 10px 14px; margin-bottom: 1.25rem;
+                            color: var(--danger); font-size: .85rem;
+                            display:flex; align-items:center; gap:.6rem;">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
+
+            {# ══ FORMULAIRE ══════════════════════════════════════ #}
+            <form method="post" novalidate>
+
+                {# Email #}
+                <div style="margin-bottom: 1rem;">
+                    <label style="display:block; font-family:'Cinzel',serif; font-size:.72rem;
+                                  letter-spacing:1px; text-transform:uppercase;
+                                  color:var(--text-muted); margin-bottom:.4rem;">
+                        <i class="bi bi-envelope me-1" style="color:var(--gold-dark);"></i> Email
+                    </label>
+                    <input type="email" name="_username"
+                           value="{{ last_username }}"
+                           autocomplete="email"
+                           autofocus
+                           placeholder="votre@email.com"
+                           style="width:100%; background:var(--dark); border:1px solid var(--gold-border);
+                                  color:var(--text-primary); padding:10px 14px; border-radius:4px;
+                                  font-size:.9rem; outline:none; font-family:'Lato',sans-serif;
+                                  transition: border-color .2s;"
+                           onfocus="this.style.borderColor='var(--gold)'"
+                           onblur="this.style.borderColor='var(--gold-border)'">
+                </div>
+
+                {# Mot de passe #}
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="display:block; font-family:'Cinzel',serif; font-size:.72rem;
+                                  letter-spacing:1px; text-transform:uppercase;
+                                  color:var(--text-muted); margin-bottom:.4rem;">
+                        <i class="bi bi-lock me-1" style="color:var(--gold-dark);"></i> Mot de passe
+                    </label>
+                    <input type="password" name="_password"
+                           autocomplete="current-password"
+                           placeholder="Votre mot de passe"
+                           style="width:100%; background:var(--dark); border:1px solid var(--gold-border);
+                                  color:var(--text-primary); padding:10px 14px; border-radius:4px;
+                                  font-size:.9rem; outline:none; font-family:'Lato',sans-serif;
+                                  transition: border-color .2s;"
+                           onfocus="this.style.borderColor='var(--gold)'"
+                           onblur="this.style.borderColor='var(--gold-border)'">
+                </div>
+
+                {# Se souvenir de moi #}
+                <div style="display:flex; align-items:center; gap:.75rem; margin-bottom:1.5rem;">
+                    <input type="checkbox" name="_remember_me" id="remember"
+                           style="width:16px; height:16px; accent-color:var(--gold); cursor:pointer;">
+                    <label for="remember"
+                           style="color:var(--text-muted); font-size:.82rem; cursor:pointer;">
+                        Se souvenir de moi
+                    </label>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                {# Bouton submit #}
+                <button type="submit" class="btn-retro"
+                        style="width:100%; justify-content:center; padding:12px;">
+                    <i class="bi bi-box-arrow-in-right"></i> Se connecter
+                </button>
+
+            </form>
+
+            {# Lien inscription #}
+            <div style="text-align:center; margin-top:1.5rem; padding-top:1.5rem;
+                        border-top: 1px solid var(--gold-border);">
+                <span style="color:var(--text-muted); font-size:.85rem;">Pas encore de compte ?</span>
+                <a href="{{ path('app_register') }}"
+                   style="color:var(--gold); font-family:'Cinzel',serif;
+                          font-size:.82rem; letter-spacing:1px; margin-left:.5rem;
+                          transition: color .2s;">
+                    <i class="bi bi-person-plus me-1"></i> S'inscrire
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}RetroGames Shop{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* === CSS original exact === */
+        :root {
+            --black: #080808;
+            --black2: #0f0f0f;
+            --dark: #141414;
+            --dark2: #1c1c1c;
+            --card-bg: #191919;
+            --card-hover: #212121;
+            --gold: #c9a84c;
+            --gold-light: #e8c96d;
+            --gold-dark: #9a7530;
+            --gold-subtle: rgba(201, 168, 76, .12);
+            --gold-border: rgba(201, 168, 76, .25);
+            --text-primary: #f0ead6;
+            --text-secondary: #b8a98a;
+            --text-muted: #6b5f48;
+            --success: #4caf72;
+            --danger: #cf4a4a;
+            --border: rgba(255, 255, 255, .06);
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--black);
+            color: var(--text-primary);
+            font-family: 'Lato', sans-serif;
+            font-weight: 300;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+        main { flex: 1; }
+        a { text-decoration: none; color: inherit; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--black2); }
+        ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+        .topbar { background: var(--black2); border-bottom: 1px solid var(--gold-border); padding: 7px 0; font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.5px; }
+        .topbar i { color: var(--gold); }
+        .topbar a { color: var(--text-secondary); transition: color 0.2s; }
+        .topbar a:hover { color: var(--gold-light); }
+        .topbar .separator { color: var(--text-muted); margin: 0 12px; }
+        .navbar { background: var(--black2); border-bottom: 1px solid var(--gold-border); padding: 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 24px rgba(0,0,0,.6); }
+        .navbar::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+        .navbar .container { padding: 0 20px; }
+        .navbar-brand { font-family: 'Press Start 2P', cursive; font-size: 0.78rem; color: var(--gold) !important; text-shadow: 0 0 15px rgba(201,168,76,.5); padding: 20px 0; display: flex; align-items: center; gap: 10px; letter-spacing: 2px; transition: text-shadow 0.3s; }
+        .navbar-brand:hover { text-shadow: 0 0 25px var(--gold), 0 0 50px var(--gold-dark); color: var(--gold-light) !important; }
+        .navbar-search { flex: 1; max-width: 500px; margin: 0 28px; }
+        .navbar-search .input-group { background: var(--dark); border: 1px solid var(--gold-border); border-radius: 4px; overflow: hidden; transition: border-color 0.25s, box-shadow 0.25s; }
+        .navbar-search .input-group:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,.1); }
+        .navbar-search input { background: transparent; border: none; color: var(--text-primary); padding: 10px 16px; font-family: 'Lato', sans-serif; font-size: 0.9rem; outline: none; width: 100%; }
+        .navbar-search input::placeholder { color: var(--text-muted); }
+        .navbar-search button { background: var(--gold-dark); border: none; color: var(--black); padding: 0 20px; font-size: 0.95rem; cursor: pointer; transition: background 0.2s; font-weight: 700; }
+        .navbar-search button:hover { background: var(--gold); }
+        .navbar-nav { gap: 0; }
+        .nav-link { color: var(--text-secondary) !important; font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 22px 16px !important; display: flex; align-items: center; gap: 7px; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; position: relative; }
+        .nav-link i { font-size: 0.95rem; color: var(--gold-dark); transition: color 0.2s; }
+        .nav-link:hover, .nav-link.active { color: var(--gold-light) !important; border-bottom-color: var(--gold); }
+        .nav-link:hover i { color: var(--gold); }
+        .navbar-toggler { border: 1px solid var(--gold-border); padding: 7px 11px; }
+        .navbar-toggler:focus { box-shadow: none; }
+        .navbar-toggler-icon { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='%23c9a84c' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"); }
+        /* ...reste du CSS exact comme ton ancien fichier... */
+    </style>
+
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+
+<div class="topbar d-none d-md-block">
+    <div class="container d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-truck me-1"></i> Livraison gratuite dès 49 € <span class="separator">|</span> <i class="bi bi-shield-check me-1"></i> Paiement 100 % sécurisé</span>
+        <span><a href="#"><i class="bi bi-headset me-1"></i> Support</a> <span class="separator">|</span> <a href="#"><i class="bi bi-arrow-counterclockwise me-1"></i> Retours 30 jours</a></span>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('home') }}"><i class="bi bi-joystick"></i> RetroGames</a>
+        <div class="navbar-search d-none d-lg-flex">
+            <form method="get" action="{{ path('app_product_index') }}" class="w-100">
+                <div class="input-group">
+                    <input type="text" name="q" placeholder="Rechercher un jeu, une console…" value="{{ app.request.query.get('q') }}">
+                    <button type="submit"><i class="bi bi-search"></i></button>
+                </div>
+            </form>
+        </div>
+        <button class="navbar-toggler ms-auto me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <li class="nav-item"><a class="nav-link" href="{{ path('home') }}"><i class="bi bi-house-fill"></i> Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_product_index') }}"><i class="bi bi-grid-fill"></i> Tous les jeux</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('category_index') }}"><i class="bi bi-tags-fill"></i> Catégories</a></li>
+            </ul>
+
+            <a href="{{ path('cart_index') }}" class="btn-cart ms-2">
+                <i class="bi bi-cart3"></i> Panier
+                <span class="cart-badge">{{ cart_count() }}</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<main>
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="container mt-3">
+                <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {% block body %}{% endblock %}
+</main>
+
+<footer>
+    <!-- footer exact comme ton ancien fichier -->
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>

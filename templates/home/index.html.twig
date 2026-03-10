@@ -8,7 +8,7 @@
     <div class="container">
         <h1><i class="bi bi-joystick"></i> RetroGames Shop</h1>
         <p class="lead mt-3">La boutique des jeux vidéo rétro des années 70 à 2000</p>
-        <a href="{{ path('product_index') }}" class="btn btn-retro mt-3">
+        <a href="{{ path('app_product_index') }}" class="btn btn-retro mt-3">
             <i class="bi bi-controller"></i> Voir tous les jeux
         </a>
     </div>
@@ -38,7 +38,7 @@
         {% for product in latest %}
             <div class="col-sm-6 col-lg-3">
                 <div class="card">
-                    <img src="{{ product.imageUrl }}"
+                    <img src="{{ product.image }}"
                          class="card-img-top"
                          alt="{{ product.name }}"
                          onerror="this.src='https://placehold.co/300x200/2a1040/e0e0e0?text=No+Image'">
@@ -48,7 +48,7 @@
                         <p class="card-text flex-grow-1">{{ product.description|u.truncate(80, '…', false) }}</p>
                         <div class="d-flex justify-content-between align-items-center mt-3">
                             <span class="price">{{ product.price|number_format(2, ',', '\u00a0') }} €</span>
-                            <a href="{{ path('product_show', {id: product.id}) }}" class="btn btn-retro">Voir</a>
+                            <a href="{{ path('app_product_show', {id: product.id}) }}" class="btn btn-retro">Voir</a>
                         </div>
                     </div>
                 </div>

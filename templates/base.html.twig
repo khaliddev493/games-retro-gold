@@ -201,43 +201,7 @@
 		.nav-link:hover i {
 			color: var(--gold);
 		}
-		.btn-cart {
-			background: transparent;
-			border: 1px solid var(--gold-border);
-			color: var(--text-secondary);
-			border-radius: 4px;
-			padding: 9px 18px;
-			font-family: 'Cinzel', serif;
-			font-size: 0.72rem;
-			letter-spacing: 1px;
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			margin-left: 16px;
-			transition: all 0.25s;
-			white-space: nowrap;
-			cursor: pointer;
-		}
-		.btn-cart i {
-			color: var(--gold);
-			font-size: 1rem;
-		}
-		.btn-cart:hover,
-		.btn-cart.show {
-			background: var(--gold-subtle);
-			border-color: var(--gold);
-			color: var(--gold-light);
-		}
-		.btn-cart .cart-badge {
-			background: var(--gold);
-			color: var(--black);
-			font-size: 0.65rem;
-			font-weight: 700;
-			padding: 2px 7px;
-			border-radius: 10px;
-			font-family: 'Lato', sans-serif;
-		}
-		.navbar-toggler {
+		*		.navbar-toggler {
 			border: 1px solid var(--gold-border);
 			padding: 7px 11px;
 		}
@@ -513,7 +477,7 @@
 				RetroGames
 			</a>
 			<div class="navbar-search d-none d-lg-flex">
-				<form method="get" action="{{ path('product_index') }}" class="w-100">
+				<form method="get" action="{{ path('app_product_index') }}" class="w-100">
 					<div class="input-group">
 						<input type="text" name="q" placeholder="Rechercher un jeu, une console…" value="{{ app.request.query.get('q') }}">
 						<button type="submit">
@@ -534,7 +498,7 @@
 						</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ path('product_index') }}">
+						<a class="nav-link" href="{{ path('app_product_index') }}">
 							<i class="bi bi-grid-fill"></i>
 							Tous les jeux
 						</a>
@@ -629,10 +593,14 @@
 					</div>
 				{% endif %}
 
-				<a href="#" class="btn-cart" style="margin-left:8px;">
+				<a href="{{ path('cart_index') }}" class="btn-cart" style="margin-left:8px;">
 					<i class="bi bi-cart3"></i>
 					Panier
-					<span class="cart-badge">0</span>
+					{% if app.user %}
+						<span class="cart-badge">{{ cart_count|default(0) }}}</span>
+					{% else %}
+						<span class="cart-badge">0</span>
+					{% endif %}
 				</a>
 			</div>
 		</div>
@@ -680,7 +648,7 @@
 						<i class="bi bi-chevron-right me-1" style="font-size:.7rem;color:var(--gold-dark)"></i>
 						Accueil
 					</a>
-					<a href="{{ path('product_index') }}" class="footer-link">
+					<a href="{{ path('app_product_index') }}" class="footer-link">
 						<i class="bi bi-chevron-right me-1" style="font-size:.7rem;color:var(--gold-dark)"></i>
 						Tous les jeux
 					</a>

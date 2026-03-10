@@ -1,0 +1,274 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Panier{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* ── Variables ── */
+        :root {
+            --ink:      #1a1a2e;
+            --surface:  #f8f7f4;
+            --card:     #ffffff;
+            --accent:   #e63946;
+            --accent2:  #457b9d;
+            --muted:    #6b7280;
+            --border:   #e5e7eb;
+            --radius:   12px;
+            --shadow:   0 2px 16px rgba(26,26,46,.08);
+        }
+
+        body { background: var(--surface); color: var(--ink); font-family: 'Georgia', serif; }
+
+        /* ── Layout ── */
+        .cart-page { max-width: 960px; margin: 3rem auto; padding: 0 1.25rem; }
+
+        .cart-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 2.5rem; }
+        .cart-header h1 {
+            font-size: 2.25rem; font-weight: 700; letter-spacing: -.03em;
+            font-family: 'Georgia', serif;
+        }
+        .cart-header .badge {
+            background: var(--accent); color: #fff;
+            font-size: .75rem; font-family: sans-serif; font-weight: 700;
+            padding: .2rem .65rem; border-radius: 99px; letter-spacing: .04em;
+        }
+
+        /* ── Flash messages ── */
+        .flash { padding: .85rem 1.25rem; border-radius: var(--radius); margin-bottom: 1.25rem;
+                 font-family: sans-serif; font-size: .9rem; font-weight: 500; }
+        .flash-success { background: #d1fae5; color: #065f46; border-left: 4px solid #10b981; }
+        .flash-info    { background: #dbeafe; color: #1e40af; border-left: 4px solid #3b82f6; }
+        .flash-warning { background: #fef3c7; color: #92400e; border-left: 4px solid #f59e0b; }
+        .flash-error   { background: #fee2e2; color: #991b1b; border-left: 4px solid var(--accent); }
+
+        /* ── Empty state ── */
+        .cart-empty {
+            text-align: center; padding: 5rem 2rem;
+            background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+        }
+        .cart-empty svg { opacity: .18; margin-bottom: 1.5rem; }
+        .cart-empty h2 { font-size: 1.5rem; margin-bottom: .5rem; }
+        .cart-empty p  { color: var(--muted); font-family: sans-serif; }
+
+        /* ── Items list ── */
+        .cart-grid { display: grid; grid-template-columns: 1fr 280px; gap: 2rem; align-items: start; }
+        @media (max-width: 700px) { .cart-grid { grid-template-columns: 1fr; } }
+
+        .cart-items { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+
+        .cart-item {
+            display: grid; grid-template-columns: 72px 1fr auto;
+            gap: 1rem; align-items: center;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            transition: background .15s;
+        }
+        .cart-item:last-child { border-bottom: none; }
+        .cart-item:hover { background: #fafaf8; }
+
+        .item-img {
+            width: 72px; height: 72px; border-radius: 8px;
+            background: var(--surface); object-fit: cover;
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--muted); font-size: 1.75rem;
+        }
+
+        .item-name { font-size: 1rem; font-weight: 600; margin-bottom: .2rem; }
+        .item-price { color: var(--muted); font-family: sans-serif; font-size: .875rem; }
+
+        .item-actions { display: flex; align-items: center; gap: .75rem; }
+
+        .qty-form { display: flex; align-items: center; gap: .25rem; }
+        .qty-btn {
+            width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border);
+            background: none; cursor: pointer; font-size: 1rem; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            transition: border-color .15s, background .15s;
+        }
+        .qty-btn:hover { border-color: var(--ink); background: var(--ink); color: #fff; }
+        .qty-input {
+            width: 42px; text-align: center; border: 1.5px solid var(--border);
+            border-radius: 6px; padding: .2rem .4rem; font-size: .9rem;
+            font-family: sans-serif;
+        }
+
+        .remove-btn {
+            background: none; border: none; cursor: pointer;
+            color: var(--muted); padding: .35rem; border-radius: 6px;
+            display: flex; transition: color .15s, background .15s;
+        }
+        .remove-btn:hover { color: var(--accent); background: #fee2e2; }
+
+        .item-subtotal { font-size: 1rem; font-weight: 700; min-width: 80px; text-align: right; }
+
+        /* ── Summary card ── */
+        .cart-summary {
+            background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+            padding: 1.75rem;
+            position: sticky; top: 1.5rem;
+        }
+        .cart-summary h2 { font-size: 1.25rem; margin-bottom: 1.25rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border); }
+
+        .summary-line { display: flex; justify-content: space-between; margin-bottom: .65rem; font-family: sans-serif; font-size: .9rem; }
+        .summary-total { display: flex; justify-content: space-between; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid var(--ink); font-weight: 700; font-size: 1.15rem; }
+
+        .btn-checkout {
+            display: block; width: 100%; padding: .9rem;
+            background: var(--ink); color: #fff; text-align: center;
+            border: none; border-radius: var(--radius); cursor: pointer;
+            font-family: sans-serif; font-size: 1rem; font-weight: 600;
+            margin-top: 1.25rem; letter-spacing: .02em;
+            transition: background .2s, transform .1s;
+        }
+        .btn-checkout:hover { background: #2d2d4e; transform: translateY(-1px); }
+        .btn-checkout:active { transform: translateY(0); }
+
+        .btn-clear {
+            display: block; width: 100%; padding: .65rem;
+            background: none; border: 1.5px solid var(--border);
+            border-radius: var(--radius); cursor: pointer;
+            font-family: sans-serif; font-size: .85rem; color: var(--muted);
+            margin-top: .75rem; transition: border-color .15s, color .15s;
+        }
+        .btn-clear:hover { border-color: var(--accent); color: var(--accent); }
+
+        .continue-link { display: block; text-align: center; margin-top: 1rem; font-family: sans-serif; font-size: .85rem; color: var(--accent2); text-decoration: none; }
+        .continue-link:hover { text-decoration: underline; }
+
+        /* ── Responsive item ── */
+        @media (max-width: 540px) {
+            .cart-item { grid-template-columns: 56px 1fr; }
+            .item-subtotal { grid-column: 2; }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="cart-page">
+
+    {# ── Titre ── #}
+    <div class="cart-header">
+        <h1>Mon Panier</h1>
+        {% if cart.itemCount > 0 %}
+            <span class="badge">{{ cart.itemCount }} article{{ cart.itemCount > 1 ? 's' : '' }}</span>
+        {% endif %}
+    </div>
+
+    {# ── Flash messages ── #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash flash-{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    {# ── Panier vide ── #}
+    {% if cart.items is empty %}
+        <div class="cart-empty">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+            <h2>Votre panier est vide</h2>
+            <p>Ajoutez des produits pour commencer vos achats.</p>
+            <a href="{{ path('home') }}" style="display:inline-block;margin-top:1.5rem;padding:.8rem 1.75rem;background:var(--ink);color:#fff;border-radius:var(--radius);font-family:sans-serif;text-decoration:none;font-weight:600;">
+                Découvrir les produits
+            </a>
+        </div>
+
+    {# ── Panier rempli ── #}
+    {% else %}
+        <div class="cart-grid">
+
+            {# Articles #}
+            <div class="cart-items">
+                {% for item in cart.items %}
+                <div class="cart-item">
+
+                    {# Image / placeholder #}
+                    <div class="item-img">
+                        {% if item.product.image is defined and item.product.image %}
+                            <img src="{{ asset(item.product.image) }}" alt="{{ item.product.name }}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">
+                        {% else %}
+                            🛍️
+                        {% endif %}
+                    </div>
+
+                    {# Infos #}
+                    <div>
+                        <div class="item-name">{{ item.product.name }}</div>
+                        <div class="item-price">{{ (item.unitPrice / 100)|number_format(2, ',', ' ') }} €&nbsp;/ unité</div>
+                    </div>
+
+                    {# Actions : quantité + supprimer + sous-total #}
+                    <div class="item-actions">
+
+                        {# Quantité #}
+                        <form method="post" action="{{ path('cart_update', {id: item.id}) }}" class="qty-form">
+                            <button type="submit" name="quantity" value="{{ item.quantity - 1 }}" class="qty-btn" title="Moins">−</button>
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="0" max="99"
+                                   class="qty-input"
+                                   onchange="this.form.submit()">
+                            <button type="submit" name="quantity" value="{{ item.quantity + 1 }}" class="qty-btn" title="Plus">+</button>
+                        </form>
+
+                        {# Supprimer #}
+                        <form method="post" action="{{ path('cart_remove', {id: item.id}) }}">
+                            <button type="submit" class="remove-btn" title="Supprimer">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+                                </svg>
+                            </button>
+                        </form>
+
+                        {# Sous-total #}
+                        <div class="item-subtotal">
+                            {{ (item.subtotal / 100)|number_format(2, ',', ' ') }} €
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {# Récapitulatif #}
+            <div class="cart-summary">
+                <h2>Récapitulatif</h2>
+
+                <div class="summary-line">
+                    <span>Sous-total</span>
+                    <span>{{ (total / 100)|number_format(2, ',', ' ') }} €</span>
+                </div>
+                <div class="summary-line">
+                    <span>Livraison</span>
+                    <span style="color: #10b981; font-weight:600;">Gratuite</span>
+                </div>
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span>{{ (total / 100)|number_format(2, ',', ' ') }} €</span>
+                </div>
+
+                {# Checkout #}
+                <form method="post" action="{{ path('cart_checkout') }}">
+                    <button type="submit" class="btn-checkout">
+                        Valider la commande →
+                    </button>
+                </form>
+
+                {# Vider le panier #}
+                <form method="post" action="{{ path('cart_clear') }}">
+                    <button type="submit" class="btn-clear"
+                            onclick="return confirm('Vider tout le panier ?')">
+                        Vider le panier
+                    </button>
+                </form>
+
+                <a href="{{ path('home') }}" class="continue-link">← Continuer mes achats</a>
+            </div>
+
+        </div>{# /cart-grid #}
+    {% endif %}
+
+</div>{# /cart-page #}
+{% endblock %}

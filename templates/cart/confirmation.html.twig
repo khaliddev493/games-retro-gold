@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande confirmée{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        :root {
+            --ink: #1a1a2e; --surface: #f8f7f4; --card: #ffffff;
+            --accent: #e63946; --green: #10b981; --border: #e5e7eb;
+            --radius: 12px; --shadow: 0 2px 16px rgba(26,26,46,.08);
+        }
+        body { background: var(--surface); font-family: 'Georgia', serif; color: var(--ink); }
+
+        .confirm-page { max-width: 640px; margin: 4rem auto; padding: 0 1.25rem; text-align: center; }
+
+        .confirm-icon {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: #d1fae5; margin: 0 auto 1.75rem;
+            display: flex; align-items: center; justify-content: center;
+            animation: pop .4s cubic-bezier(.34,1.56,.64,1);
+        }
+        @keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        h1 { font-size: 2rem; margin-bottom: .5rem; }
+        .subtitle { color: #6b7280; font-family: sans-serif; margin-bottom: 2.5rem; }
+
+        .order-card {
+            background: var(--card); border-radius: var(--radius);
+            box-shadow: var(--shadow); padding: 1.75rem; text-align: left; margin-bottom: 2rem;
+        }
+        .order-card h2 { font-size: 1.1rem; margin-bottom: 1rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border); }
+
+        .order-item { display: flex; justify-content: space-between; padding: .6rem 0; font-family: sans-serif; font-size: .9rem; border-bottom: 1px solid var(--border); }
+        .order-item:last-of-type { border-bottom: none; }
+
+        .order-total { display: flex; justify-content: space-between; padding-top: 1rem; font-weight: 700; font-size: 1.1rem; }
+
+        .btn-home {
+            display: inline-block; padding: .9rem 2.5rem;
+            background: var(--ink); color: #fff; border-radius: var(--radius);
+            font-family: sans-serif; font-size: 1rem; font-weight: 600;
+            text-decoration: none; transition: background .2s;
+        }
+        .btn-home:hover { background: #2d2d4e; }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="confirm-page">
+
+    <div class="confirm-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+        </svg>
+    </div>
+
+    <h1>Commande confirmée !</h1>
+    <p class="subtitle">Merci pour votre achat. Votre commande n°{{ cart.id }} a bien été enregistrée.</p>
+
+    <div class="order-card">
+        <h2>Récapitulatif de la commande</h2>
+
+        {% for item in cart.items %}
+        <div class="order-item">
+            <span>{{ item.product.name }} × {{ item.quantity }}</span>
+            <span>{{ (item.subtotal / 100)|number_format(2, ',', ' ') }} €</span>
+        </div>
+        {% endfor %}
+
+        <div class="order-total">
+            <span>Total payé</span>
+            <span>{{ (cart.total / 100)|number_format(2, ',', ' ') }} €</span>
+        </div>
+    </div>
+
+    <a href="{{ path('app_home') }}" class="btn-home">Retour à l'accueil</a>
+
+</div>
+{% endblock %}

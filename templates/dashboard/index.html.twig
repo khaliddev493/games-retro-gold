@@ -5,128 +5,86 @@
 {% block body %}
 <div class="container" style="padding: 3rem 1rem;">
 
-    {# ══ HEADER ══════════════════════════════════════════════════ #}
+    <!-- HEADER -->
     <div style="margin-bottom: 2.5rem;">
         <p style="font-family:'Cinzel',serif; color:var(--text-muted);
                   font-size:.75rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:.4rem;">
-            <i class="bi bi-joystick me-1" style="color:var(--gold);"></i> Espace client
+            🎮 Espace client
         </p>
+
         <h1 style="font-family:'Cinzel',serif; font-size:1.6rem; font-weight:700;
                    color:var(--text-primary); letter-spacing:2px;">
             Bonjour, <span style="color:var(--gold);">{{ user.firstName }}</span> 👾
         </h1>
+
         <p style="color:var(--text-muted); font-size:.85rem; margin-top:.4rem;">
             Bienvenue sur votre espace personnel RetroGames
         </p>
     </div>
 
-    {# ══ CARDS INFOS ═════════════════════════════════════════════ #}
+    <!-- INFOS UTILISATEUR -->
     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:1.25rem; margin-bottom:2.5rem;">
 
-        <div style="background:var(--dark2); border:1px solid var(--gold-border);
-                    border-radius:8px; padding:1.25rem 1.5rem;
-                    border-left: 3px solid var(--gold);">
-            <div style="font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:2px;
-                        text-transform:uppercase; color:var(--text-muted); margin-bottom:.5rem;">
-                <i class="bi bi-person me-1" style="color:var(--gold);"></i> Nom complet
-            </div>
-            <div style="font-size:1.05rem; font-weight:600; color:var(--text-primary);">
-                {{ user.firstName }} {{ user.lastName }}
-            </div>
+        <div class="card-retro">
+            <strong>Nom complet :</strong><br>
+            {{ user.firstName }} {{ user.lastName }}
         </div>
 
-        <div style="background:var(--dark2); border:1px solid var(--gold-border);
-                    border-radius:8px; padding:1.25rem 1.5rem;
-                    border-left: 3px solid var(--gold);">
-            <div style="font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:2px;
-                        text-transform:uppercase; color:var(--text-muted); margin-bottom:.5rem;">
-                <i class="bi bi-envelope me-1" style="color:var(--gold);"></i> Email
-            </div>
-            <div style="font-size:1rem; font-weight:600; color:var(--text-primary); word-break:break-all;">
-                {{ user.email }}
-            </div>
+        <div class="card-retro">
+            <strong>Email :</strong><br>
+            {{ user.email }}
         </div>
 
-        <div style="background:var(--dark2); border:1px solid var(--gold-border);
-                    border-radius:8px; padding:1.25rem 1.5rem;
-                    border-left: 3px solid var(--gold);">
-            <div style="font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:2px;
-                        text-transform:uppercase; color:var(--text-muted); margin-bottom:.5rem;">
-                <i class="bi bi-calendar me-1" style="color:var(--gold);"></i> Membre depuis
-            </div>
-            <div style="font-size:1.05rem; font-weight:600; color:var(--text-primary);">
-                {{ user.createdAt|date('d/m/Y') }}
-            </div>
+        <div class="card-retro">
+            <strong>Membre depuis :</strong><br>
+            {{ user.createdAt|date('d/m/Y') }}
         </div>
 
-        <div style="background:var(--dark2); border:1px solid var(--gold-border);
-                    border-radius:8px; padding:1.25rem 1.5rem;
-                    border-left: 3px solid var(--gold);">
-            <div style="font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:2px;
-                        text-transform:uppercase; color:var(--text-muted); margin-bottom:.5rem;">
-                <i class="bi bi-shield me-1" style="color:var(--gold);"></i> Statut
-            </div>
-            <div style="font-size:1rem; font-weight:600;">
-                {% if 'ROLE_ADMIN' in user.roles %}
-                    <span style="color:var(--gold);">⭐ Administrateur</span>
-                {% else %}
-                    <span style="color:var(--success);">✔ Client vérifié</span>
-                {% endif %}
-            </div>
+        <div class="card-retro">
+            <strong>Statut :</strong><br>
+            {% if 'ROLE_ADMIN' in user.roles %}
+                ⭐ Administrateur
+            {% else %}
+                ✔ Client vérifié
+            {% endif %}
         </div>
 
     </div>
 
-    {# ══ ACTIONS RAPIDES ══════════════════════════════════════════ #}
-    <div style="background:var(--dark2); border:1px solid var(--gold-border);
-                border-radius:8px; padding:1.75rem 2rem; margin-bottom:2.5rem;">
+    <!-- ACTIONS -->
+    <div style="margin-bottom:2rem;">
+        <h3 style="margin-bottom:1rem;">Actions rapides</h3>
 
-        <div style="font-family:'Cinzel',serif; font-size:.75rem; letter-spacing:2px;
-                    text-transform:uppercase; color:var(--gold);
-                    margin-bottom:1.25rem; padding-bottom:.75rem;
-                    border-bottom:1px solid var(--gold-border);">
-            Actions rapides
-        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:1rem;">
+            <a href="{{ path('app_dashboard') }}" class="btn-retro">
+                Parcourir les jeux
+            </a>
 
-        <div style="display:flex; flex-wrap:wrap; gap:.75rem;">
-            <a href="{{ path('product_index') }}" class="btn-retro">
-                <i class="bi bi-grid-fill"></i> Parcourir les jeux
+            <a href="#" class="btn-retro">
+                Mes commandes
             </a>
-            <a href="#" class="btn-retro" style="background:var(--dark); border:1px solid var(--gold-border);
-               color:var(--text-secondary);">
-                <i class="bi bi-bag" style="color:var(--gold);"></i> Mes commandes
+
+            <a href="{{ path('app_profile') }}" class="btn-retro">
+                Mon profil
             </a>
-            <a href="{{ path('app_profile') }}" class="btn-retro" style="background:var(--dark); border:1px solid var(--gold-border);
-               color:var(--text-secondary);">
-                <i class="bi bi-person" style="color:var(--gold);"></i> Mon profil
-            </a>
-            <a href="{{ path('app_logout') }}" class="btn-retro"
-               style="background:rgba(207,74,74,.1); border:1px solid rgba(207,74,74,.3); color:var(--danger);">
-                <i class="bi bi-box-arrow-right"></i> Déconnexion
+
+            <a href="{{ path('app_logout') }}" class="btn-retro" style="background:#b33939;">
+                Déconnexion
             </a>
         </div>
     </div>
 
-    {# ══ DERNIÈRES COMMANDES ══════════════════════════════════════ #}
-    <div style="background:var(--dark2); border:1px solid var(--gold-border); border-radius:8px; padding:1.75rem 2rem;">
+    <!-- COMMANDES -->
+    <div>
+        <h3 style="margin-bottom:1rem;">Dernières commandes</h3>
 
-        <div style="font-family:'Cinzel',serif; font-size:.75rem; letter-spacing:2px;
-                    text-transform:uppercase; color:var(--gold);
-                    margin-bottom:1.25rem; padding-bottom:.75rem;
-                    border-bottom:1px solid var(--gold-border);">
-            <i class="bi bi-bag me-2"></i> Dernières commandes
-        </div>
+        <p style="color:var(--text-muted);">
+            Vous n'avez pas encore passé de commande.
+        </p>
 
-        <div style="text-align:center; padding:2rem 0; color:var(--text-muted);">
-            <i class="bi bi-bag-x" style="font-size:2.5rem; color:var(--gold-dark); display:block; margin-bottom:.75rem;"></i>
-            <p style="font-family:'Cinzel',serif; font-size:.82rem; letter-spacing:1px;">
-                Vous n'avez pas encore passé de commande
-            </p>
-            <a href="{{ path('product_index') }}" class="btn-retro" style="margin-top:1rem; display:inline-flex;">
-                <i class="bi bi-joystick"></i> Découvrir nos jeux
-            </a>
-        </div>
-
+        <a href="{{ path('app_dashboard') }}" class="btn-retro">
+            Découvrir nos jeux
+        </a>
     </div>
 
 </div>

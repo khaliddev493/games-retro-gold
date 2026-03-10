@@ -5,22 +5,29 @@
 {% block body %}
 <div class="container py-5">
 
+    <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ path('home') }}" style="color:var(--retro-cyan)">Accueil</a></li>
-            <li class="breadcrumb-item"><a href="{{ path('category_index') }}" style="color:var(--retro-cyan)">Catégories</a></li>
+            <li class="breadcrumb-item">
+                <a href="{{ path('home') }}" style="color:var(--retro-cyan)">Accueil</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ path('category_index') }}" style="color:var(--retro-cyan)">Catégories</a>
+            </li>
             <li class="breadcrumb-item active text-light">{{ category.name }}</li>
         </ol>
     </nav>
 
+    <!-- Titre et description de la catégorie -->
     <h1 class="section-title"><i class="bi bi-tv"></i> {{ category.name }}</h1>
-    <p class="text-muted mb-5">{{ category.description }}</p>
+    <p class="text-muted mb-5">{{ category.description ?: 'Pas de description disponible.' }}</p>
 
+    <!-- Liste des produits -->
     <div class="row g-4">
         {% for product in category.products %}
             <div class="col-sm-6 col-lg-4">
                 <div class="card">
-                    <img src="{{ product.imageUrl }}"
+                    <img src="{{ product.image }}"
                          class="card-img-top"
                          alt="{{ product.name }}"
                          onerror="this.src='https://placehold.co/300x200/2a1040/e0e0e0?text=No+Image'">
@@ -33,7 +40,7 @@
                         <p class="card-text flex-grow-1">{{ product.description|u.truncate(90, '…', false) }}</p>
                         <div class="d-flex justify-content-between align-items-center mt-3">
                             <span class="price">{{ product.price|number_format(2, ',', '\u00a0') }} €</span>
-                            <a href="{{ path('product_show', {id: product.id}) }}" class="btn btn-retro">Détails</a>
+                            <a href="{{ path('app_product_show', {id: product.id}) }}" class="btn btn-retro">Détails</a>
                         </div>
                     </div>
                 </div>
@@ -43,6 +50,7 @@
         {% endfor %}
     </div>
 
+    <!-- Bouton retour aux catégories -->
     <div class="mt-5">
         <a href="{{ path('category_index') }}" class="btn btn-retro">
             <i class="bi bi-arrow-left"></i> Retour aux catégories
